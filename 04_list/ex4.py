@@ -9,14 +9,13 @@ import threading
 #    Porque mais threads tentam entrar ao mesmo tempo na regiao protegida. Como so uma
 #    pode segurar o Lock por vez, as outras ficam bloqueadas, gerando espera e overhead.
 
-counter = 0  # recurso compartilhado
+counter = 0
 counter_lock = threading.Lock()
 
 
 def increment_counter_com_lock(iterations):
 	global counter
 
-	# Cada incremento ocorre dentro da secao critica protegida por Lock.
 	for _ in range(iterations):
 		counter_lock.acquire()
 		try:
@@ -29,12 +28,10 @@ def increment_counter_com_lock(iterations):
 
 def run_threads(funcao, num_threads, iterations_per_thread):
 	global counter
-	# Reinicia o contador para cada teste.
 	counter = 0
 	threads = []
 	inicio = time.perf_counter()
 
-	# Cria e inicia as threads.
 	for _ in range(num_threads):
 		thread = threading.Thread(
 			target=funcao,
@@ -43,7 +40,6 @@ def run_threads(funcao, num_threads, iterations_per_thread):
 		threads.append(thread)
 		thread.start()
 
-	# Aguarda todas as threads finalizarem.
 	for thread in threads:
 		thread.join()
 
@@ -57,7 +53,6 @@ CENARIOS_THREADS = [1, 2, 5, 10]
 
 resultados = []
 
-# Executa os testes mantendo carga total constante.
 for n in CENARIOS_THREADS:
 	iteracoes_por_thread = TOTAL_ITERACOES // n
 	valor_final, tempo = run_threads(
@@ -69,7 +64,6 @@ for n in CENARIOS_THREADS:
 	resultados.append((n, iteracoes_por_thread, TOTAL_ITERACOES, valor_final, tempo))
 
 
-# Exibe os resultados em formato de tabela.
 cabecalho = (
 	f"{'Threads':<8}"
 	f"{'Iteracoes/thread':<20}"

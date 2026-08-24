@@ -1,7 +1,7 @@
 import time
 import threading
 
-counter = 0  # recurso compartilhado
+counter = 0
 
 def increment_counter_sem_lock(iterations):
     global counter

@@ -10,14 +10,13 @@ import threading
 #    O Lock adiciona overhead de aquisicao/liberacao e pode reduzir o paralelismo efetivo,
 #    aumentando o tempo total em troca de consistencia do resultado.
 
-counter = 0  # recurso compartilhado
+counter = 0
 counter_lock = threading.Lock()
 
 
 def increment_counter_sem_lock(iterations):
 	global counter
 
-	# Secao critica sem sincronizacao para evidenciar condicao de corrida.
 	for _ in range(iterations):
 		valor_atual = counter
 		time.sleep(0.0001)
@@ -27,7 +26,6 @@ def increment_counter_sem_lock(iterations):
 def increment_counter_com_lock(iterations):
 	global counter
 
-	# Secao critica protegida por Lock para garantir consistencia.
 	for _ in range(iterations):
 		counter_lock.acquire()
 		try:
@@ -40,12 +38,10 @@ def increment_counter_com_lock(iterations):
 
 def run_threads(funcao, num_threads, iterations_per_thread):
 	global counter
-	# Reinicia o contador antes de cada experimento.
 	counter = 0
 	threads = []
 	inicio = time.perf_counter()
 
-	# Cria e inicia as threads com os mesmos parametros.
 	for _ in range(num_threads):
 		thread = threading.Thread(
 			target=funcao,
@@ -54,7 +50,6 @@ def run_threads(funcao, num_threads, iterations_per_thread):
 		threads.append(thread)
 		thread.start()
 
-	# Aguarda todas as threads terminarem.
 	for thread in threads:
 		thread.join()
 
@@ -64,7 +59,6 @@ def run_threads(funcao, num_threads, iterations_per_thread):
 
 
 def ler_inteiro_positivo(mensagem):
-	# Le um inteiro positivo e repete ate entrada valida.
 	while True:
 		try:
 			valor = int(input(mensagem))
@@ -77,7 +71,6 @@ def ler_inteiro_positivo(mensagem):
 
 
 def exibir_resultado(nome_versao, num_threads, iterations_per_thread, valor, esperado, tempo):
-	# Define o status comparando resultado real e esperado.
 	status = "correto" if valor == esperado else "incorreto"
 
 	print(f"Versao: {nome_versao}")
@@ -93,14 +86,12 @@ def exibir_resultado(nome_versao, num_threads, iterations_per_thread, valor, esp
 num_threads = ler_inteiro_positivo("Numero de threads: ")
 iterations_per_thread = ler_inteiro_positivo("Numero de iteracoes por thread: ")
 
-# Executa primeiro a versao sem Lock com os parametros informados.
 valor_sem_lock, esperado_sem_lock, tempo_sem_lock = run_threads(
 	increment_counter_sem_lock,
 	num_threads=num_threads,
 	iterations_per_thread=iterations_per_thread
 )
 
-# Executa depois a versao com Lock com os mesmos parametros.
 valor_com_lock, esperado_com_lock, tempo_com_lock = run_threads(
 	increment_counter_com_lock,
 	num_threads=num_threads,

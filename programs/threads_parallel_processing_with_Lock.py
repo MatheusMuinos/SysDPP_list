@@ -1,7 +1,7 @@
 import time
 import threading
 
-counter = 0  # recurso compartilhado
+counter = 0
 
 counter_lock = threading.Lock()
 
@@ -10,7 +10,7 @@ def increment_counter_com_lock(iterations):
 
     for _ in range(iterations):
         counter_lock.acquire()
-        try: # região crítica
+        try:
             valor_atual = counter
             time.sleep(0.0001)
             counter = valor_atual + 1

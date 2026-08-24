@@ -1,7 +1,7 @@
 import time
 import threading
 
-counter = 0  # recurso compartilhado
+counter = 0
 
 counter_lock = threading.Lock()
 
