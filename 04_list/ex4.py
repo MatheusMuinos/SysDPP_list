@@ -10,7 +10,7 @@ import threading
 #    pode segurar o Lock por vez, as outras ficam bloqueadas, gerando espera e overhead.
 
 counter = 0
-counter_lock = threading.Lock()
+counter_lock = threading.Lock() # Lock para proteger a variavel global counter
 
 
 def increment_counter_com_lock(iterations):
@@ -33,10 +33,7 @@ def run_threads(funcao, num_threads, iterations_per_thread):
 	inicio = time.perf_counter()
 
 	for _ in range(num_threads):
-		thread = threading.Thread(
-			target=funcao,
-			args=(iterations_per_thread,)
-		)
+		thread = threading.Thread(target=funcao,args=(iterations_per_thread,))
 		threads.append(thread)
 		thread.start()
 
